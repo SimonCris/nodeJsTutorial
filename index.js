@@ -13,7 +13,9 @@ app.get('/', (req, res) => {
 
 app.get('/getWeather/:zip([0-9]+)', async (req, res) => {
     try {
-        const result = await getWeather({zip: req.params.zip + ',IT'});
+        const country = req.query.country_code || 'IT';
+        const lang = req.query.lang || 'it';
+        const result = await getWeather({lang, zip: req.params.zip + ',' + country});
         res.json(result);
     } catch (err) {
         res.status(500).send(err.message);
@@ -23,7 +25,7 @@ app.get('/getWeather/:zip([0-9]+)', async (req, res) => {
 app.get('/getWeather/:city([a-zA-Z]+)', async(req, res) => {
     try{
         const lang = req.query.lang || 'it';
-        const weather =  await getWeather({q : req.params.city });
+        const weather =  await getWeather({lang, q : req.params.city });
         res.json(weather);
         return weather;
     } catch (e) {
