@@ -1,6 +1,11 @@
 {
     "todos": [
     {
+        "todo": "testare applicazione",
+        "completed": true,
+        "id": 1
+    },
+    {
         "todo": "lavare la macchina",
         "completed": true,
         "id": 2

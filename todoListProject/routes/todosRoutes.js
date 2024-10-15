@@ -19,7 +19,7 @@ const router = express.Router();
 
 /** Funzione middleware */
 const loggerMiddleware = (req, resp, next) => {
-    console.log('Req: ' + req.method, req.url +  ' with params : ', req.params);
+    console.log('Todos routes --> ' + 'Req: ' + req.method, ' Url: ' + req.url);
     next();
 };
 
@@ -34,7 +34,7 @@ const validateIdMiddleware = (req, resp, next) => {
 
 /** Middleware senza rotta specificata. Si scatena, quindi, prima di ogni cambio di rotta. */
 router.use((req, resp, next) => {
-    console.log('Middleware before all route change ');
+    console.log('Middleware chiamato prima di ogni richiesta al server');
     next();
 });
 
@@ -44,16 +44,22 @@ router.use((req, resp, next) => {
 
 /** ROTTE */
 
-/** Rotta standard (equivale a 'todos/' */
-router.get('/', (req, resp) => {
+/** Rotta standard (equivale a 'todos/') */
+router.get('/', loggerMiddleware, (req, resp) => {
     resp.json(todosController.getTodos());
+});
+
+/** Rotta standard (equivale a 'todos/') */
+router.post('/', loggerMiddleware, (req, resp) => {
+    resp.json(todosController.addTodos(req.body));
 });
 
 /** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3' )'.
  * In questa rotta vengono concatenati due middleware.
  * Con questa get viene restituito il todos che ha id uguale a quello passato come parametro nella request */
 router.get('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, (req, resp) => {
-    resp.json(todosController.getTodoById(req.params.id));
+    const todo = todosController.getTodoById(req.params.id);
+    resp.status(todo ? 200 : 404).json(todo ? todo : 'Record not found');
 }]);
 
 /** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3')'.
@@ -61,11 +67,18 @@ router.get('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, (req, resp) 
  * Con questa delete viene restituito il todos che ha id uguale a quello passato come parametro nella request */
 router.delete('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, (req, resp) => {
     const todoRemoved = todosController.deleteTodoById(req.params.id);
-    resp.status(todoRemoved ? 200 : 404).json(todoRemoved ? todoRemoved : null);
+    resp.status(todoRemoved ? 200 : 404).json(todoRemoved ? todoRemoved : 'Record not found');
+}]);
+
+/** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3')'.
+ * Con questa update viene modificato e restituito il todos che ha id uguale a quello passato come parametro nella request */
+router.patch('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, (req, resp) => {
+    const todoId = req.params.id;
+    const todoToPatch = req.body;
+    const todoUpdated = todosController.updateTodoById(todoId, todoToPatch);
+    resp.status(todoUpdated ? 200 : 404).json(todoUpdated ? todoUpdated : 'Record not found');
 }]);
 
 /** FINE ROTTE */
-
-
 
 module.exports = router;
