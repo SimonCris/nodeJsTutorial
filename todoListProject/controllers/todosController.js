@@ -47,10 +47,20 @@ async function updateTodoById(idTodo, todoUpdated) {
     return result.info;
 }
 
+/** Funzione che ritorna dalla tabella delle liste, la lista che ha id uguale all'id passato in input */
+async function getTodosByList(idList) {
+    /** Il metodo query restituisce un array chiamato "result" contenente i dati recuperati dalla query.
+     * In questo caso viene passato un array con i placeholder da sostituire nella query al posto del carattere ? e
+     * vengono sostituiti nello stesso ordine in cui sono inseriti nell'array. */
+    const [result] = await dbConnection.query('SELECT * FROM todos WHERE list_id = ?', [idList]);
+    return result;
+}
+
 module.exports = {
     addTodos,
     getTodos,
     getTodoById,
+    getTodosByList,
     deleteTodoById,
     updateTodoById
 };

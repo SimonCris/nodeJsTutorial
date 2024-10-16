@@ -1,5 +1,6 @@
 const express = require('express');
 const listController = require('../controllers/listsController');
+const todosController = require('../controllers/todosController');
 
 /** Router che gestisce tutte le rotte */
 const router = express.Router();
@@ -76,6 +77,19 @@ router.patch('/:id([0-9]+)', loggerMiddleware, async (req, resp) => {
         const listToPatch = req.body;
         const listUpdated = await listController.updateListById(listId, listToPatch);
         resp.status(listUpdated ? 200 : 404).json(listUpdated ? listUpdated : 'Record not found');
+    } catch (err) {
+        resp.status(500).send(err.message);
+    }
+
+});
+
+/** Rotta con l'id (equivale a '/lists/IdDellaList/todos' ad es. '/lists/1/todos')'.
+ * Con questa get vengono restituiti i todos che fanno parte della lista che ha id uguale a quello passato come parametro nella request */
+router.get('/:list_id([0-9]+/todos)', loggerMiddleware, async (req, resp) => {
+
+    try {
+        const todosByList = await todosController.getTodosByList(req.params.list_id);
+        resp.json(todosByList ? todosByList : 'Not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }
