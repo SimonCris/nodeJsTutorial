@@ -1,5 +1,6 @@
 const express = require('express');
 const todosController = require('../controllers/todosController');
+const listController = require("../controllers/listsController");
 
 /** Router che gestisce tutte le rotte */
 const router = express.Router();
@@ -45,38 +46,70 @@ router.use((req, resp, next) => {
 /** ROTTE */
 
 /** Rotta standard (equivale a 'todos/') */
-router.get('/', loggerMiddleware, (req, resp) => {
-    resp.json(todosController.getTodos());
+router.get('/', loggerMiddleware, async (req, resp) => {
+
+    try {
+        const todos = await todosController.getTodos();
+        resp.json(todos);
+    } catch (err) {
+        resp.status(500).send(err.message);
+    }
+
 });
 
 /** Rotta standard (equivale a 'todos/') */
-router.post('/', loggerMiddleware, (req, resp) => {
-    resp.json(todosController.addTodos(req.body));
+router.post('/', loggerMiddleware, async (req, resp) => {
+
+    try {
+        const todoAdded = await todosController.addTodos(req.body);
+        resp.json(todoAdded);
+    } catch (err) {
+        resp.status(500).send(err.message);
+    }
+
 });
 
 /** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3' )'.
  * In questa rotta vengono concatenati due middleware.
  * Con questa get viene restituito il todos che ha id uguale a quello passato come parametro nella request */
-router.get('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, (req, resp) => {
-    const todo = todosController.getTodoById(req.params.id);
-    resp.status(todo ? 200 : 404).json(todo ? todo : 'Record not found');
+router.get('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req, resp) => {
+
+    try {
+        const todo = await todosController.getTodoById(req.params.id);
+        resp.json(todo ? todo : 'Todo not found');
+    } catch (err) {
+        resp.status(500).send(err.message);
+    }
+
 }]);
 
 /** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3')'.
  * In questa rotta vengono concatenati due middleware.
  * Con questa delete viene restituito il todos che ha id uguale a quello passato come parametro nella request */
-router.delete('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, (req, resp) => {
-    const todoRemoved = todosController.deleteTodoById(req.params.id);
-    resp.status(todoRemoved ? 200 : 404).json(todoRemoved ? todoRemoved : 'Record not found');
+router.delete('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req, resp) => {
+
+    try {
+        const todosDeletedNumber = await todosController.deleteTodoById(req.params.id);
+        resp.json(todosDeletedNumber);
+    } catch (err) {
+        resp.status(500).send(err.message);
+    }
+
 }]);
 
 /** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3')'.
  * Con questa update viene modificato e restituito il todos che ha id uguale a quello passato come parametro nella request */
-router.patch('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, (req, resp) => {
-    const todoId = req.params.id;
-    const todoToPatch = req.body;
-    const todoUpdated = todosController.updateTodoById(todoId, todoToPatch);
-    resp.status(todoUpdated ? 200 : 404).json(todoUpdated ? todoUpdated : 'Record not found');
+router.patch('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req, resp) => {
+
+    try {
+        const todoId = req.params.id;
+        const todoToPatch = req.body;
+        const todoUpdated = await todosController.updateTodoById(todoId, todoToPatch);
+        resp.status(todoUpdated ? 200 : 404).json(todoUpdated ? todoUpdated : 'Record not found');
+    } catch (err) {
+        resp.status(500).send(err.message);
+    }
+
 }]);
 
 /** FINE ROTTE */

@@ -38,6 +38,7 @@ router.post('/', loggerMiddleware, async (req, resp) => {
     } catch (err) {
         resp.status(500).send(err.message);
     }
+
 });
 
 /** Rotta con l'id (equivale a '/lists/IdDellaList' ad es. '/lists/1' )'.
@@ -78,6 +79,7 @@ router.patch('/:id([0-9]+)', loggerMiddleware, async (req, resp) => {
     } catch (err) {
         resp.status(500).send(err.message);
     }
+
 });
 
 /** FINE ROTTE */
