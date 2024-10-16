@@ -1,5 +1,5 @@
 /** File contenente le configurazione ai puntamenti del DB (Laragon in locale) */
-const mysql = require('mysql2/promise');
+const mysql= require('mysql2/promise');
 
 const dbConnectionsPool = mysql.createPool({
     host: 'localhost',
