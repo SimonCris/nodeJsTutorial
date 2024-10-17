@@ -13,4 +13,18 @@ app.use('/todos', todosRoutes);
 const listsRoutes = require('./routes/listsRoutes');
 app.use('/lists', listsRoutes);
 
+/** Init delle tabelle a DB a partire dai models creati nell'applicativo */
+/** Inizializzazione delle tabelle DB */
+const User = require('./models').User;
+const List = require('./models').List;
+const Todo = require('./models').Todo;
+
+/** Funziona per runnare, in ordine, le sync delle tabelle */
+async function initModelsDBTables() {
+    await User.sync();
+    await List.sync();
+    await Todo.sync();
+}
+initModelsDBTables();
+
 app.listen(4000, () => { console.log('listening on port 4000') });

@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "expressjstodo_list",
+    "database": "sequelize_expressjstodo_list",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
