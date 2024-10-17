@@ -11,5 +11,22 @@ Lanciando il comando "sequelize-cli migration --help", abbiamo tutti i comandi c
 Un altro modo per sincronizzare il DB è mediante i model che sono stati creati nell'applicazione e questo lo si può fare semplicemente importando il model che si vuole sincronizzare (nell'index.js del progetto) e su di esso lanciare il medoto sync(), come ad esempio: \
 const User = require('./models').User;\
 User.sync();\
-In questo modo stiamo dicendo che vogliamo sincronizzare a DB la tabella relativa a User che abbiamo creato mediante model lato applicazione.
+In questo modo stiamo dicendo che vogliamo sincronizzare a DB la tabella relativa a User che abbiamo creato mediante model lato applicazione. \
+Per la prima volta conviene lanciare la sync dei singoli model. Quando tutte le tabelle sono state create si può
+abbreviare questo procedimento chiamando il metodo sync() di sequelize, in questo modo: \
+
+async function initModelsDBTables(isFirstCreation) {
+
+    if (isFirstCreation) {
+        await User.sync();
+        await List.sync();
+        await Todo.sync();
+    } else {
+        const created = await sequelize.sync();
+        if (created) {console.log('CREATED')};
+    }
+
+}
+
+
 
