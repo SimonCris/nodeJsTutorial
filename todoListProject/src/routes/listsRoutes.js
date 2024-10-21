@@ -48,7 +48,7 @@ router.get('/:id([0-9]+)', loggerMiddleware, async (req, resp) => {
 
     try {
         const list = await listController.getListById(req.params.id);
-        resp.json(list ? list : 'List not found');
+        resp.status(list ? 200 : 404).json(list ? list : 'List not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -61,7 +61,7 @@ router.delete('/:id([0-9]+)', loggerMiddleware, async (req, resp) => {
 
     try {
         const listsDeletedNumber = await listController.deleteListById(req.params.id);
-        resp.json(listsDeletedNumber);
+        resp.status(listsDeletedNumber ? 200 : 404).json(listsDeletedNumber ? listsDeletedNumber : 'List not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -76,7 +76,7 @@ router.patch('/:id([0-9]+)', loggerMiddleware, async (req, resp) => {
         const listId = req.params.id;
         const listToPatch = req.body;
         const listUpdated = await listController.updateListById(listId, listToPatch);
-        resp.status(listUpdated ? 200 : 404).json(listUpdated ? listUpdated : 'Record not found');
+        resp.status(listUpdated > 0 ? 200 : 404).json(listUpdated > 0 ? listUpdated : 'List not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -89,7 +89,7 @@ router.get('/:list_id([0-9]+/todos)', loggerMiddleware, async (req, resp) => {
 
     try {
         const todosByList = await todosController.getTodosByList(req.params.list_id);
-        resp.json(todosByList ? todosByList : 'Not found');
+        resp.status(todosByList ? 200 : 404).json(todosByList ? todosByList : 'Not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }

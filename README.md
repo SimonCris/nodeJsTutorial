@@ -28,5 +28,7 @@ async function initModelsDBTables(isFirstCreation) {
 
 }
 
+SEEDERS \
+I seeders sono degli "alimentatori" che forniscono dei dati per riempire il DB per motivi di test o altre operazioni. Si possono creare e lanciare tramite i comandi "sequelize-cli" lanciati dal terminale (sequelize-cli -h per vedere tutti i comandi che si possono utilizzare). Si può utilizzare la librearia "faker" per creare dei dati fake realistici.
 
 

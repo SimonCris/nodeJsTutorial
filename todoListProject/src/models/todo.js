@@ -11,19 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.List);
     }
   }
   Todo.init({
     list_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      // allowNull: false,
       index: true,
       references: {
         model: {
           tableName: 'lists',
         },
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'SET NULL'
     },
     todo: {
       type: DataTypes.STRING,

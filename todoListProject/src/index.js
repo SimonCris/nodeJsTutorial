@@ -39,6 +39,6 @@ async function initModelsDBTables(isFirstCreation) {
     }
 
 }
-initModelsDBTables(false);
+// initModelsDBTables(false);
 
 app.listen(4000, () => { console.log('listening on port 4000') });

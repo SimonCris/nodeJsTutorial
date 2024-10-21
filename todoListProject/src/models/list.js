@@ -11,19 +11,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      List.belongsTo(models.User);
+      List.hasMany(models.Todo);
     }
   }
   List.init({
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      // allowNull: false,
       index: true,
       references: {
         model: {
           tableName: 'users'
         },
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'SET NULL'
     },
     name: {
       type: DataTypes.STRING,

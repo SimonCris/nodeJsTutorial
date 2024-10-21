@@ -13,14 +13,16 @@ module.exports = {
       },
       list_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        // allowNull: false,
         index: true,
         references: {
           model: {
             tableName: 'lists',
           },
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'SET NULL',
       },
       todo: {
         type: Sequelize.STRING,

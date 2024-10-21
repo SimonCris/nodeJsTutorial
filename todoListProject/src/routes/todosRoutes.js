@@ -50,7 +50,7 @@ router.get('/', loggerMiddleware, async (req, resp) => {
 
     try {
         const todos = await todosController.getTodos();
-        resp.json(todos);
+        resp.status(todos ? 200 : 404).json(todos ? todos : 'Todos not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -76,7 +76,7 @@ router.get('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req, 
 
     try {
         const todo = await todosController.getTodoById(req.params.id);
-        resp.json(todo ? todo : 'Todo not found');
+        resp.status(todo ? 200 : 404).json(todo ? todo : 'Todo not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -90,7 +90,7 @@ router.delete('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (re
 
     try {
         const todosDeletedNumber = await todosController.deleteTodoById(req.params.id);
-        resp.json(todosDeletedNumber);
+        resp.status(todosDeletedNumber ? 200 : 404).json(todosDeletedNumber ? todosDeletedNumber : 'Todo not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -105,7 +105,7 @@ router.patch('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req
         const todoId = req.params.id;
         const todoToPatch = req.body;
         const todoUpdated = await todosController.updateTodoById(todoId, todoToPatch);
-        resp.status(todoUpdated ? 200 : 404).json(todoUpdated ? todoUpdated : 'Record not found');
+        resp.status(todoUpdated ? 200 : 404).json(todoUpdated ? todoUpdated : 'Todo not found');
     } catch (err) {
         resp.status(500).send(err.message);
     }
