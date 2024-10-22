@@ -42,3 +42,22 @@ async function initModelsDBTables(isFirstCreation) {
 // initModelsDBTables(false);
 
 app.listen(4000, () => { console.log('listening on port 4000') });
+
+/** FE */
+/** Inizializzazione di express-handlebars per la gestione delle pagine FE */
+const {engine} = require('express-handlebars');
+app.engine(
+    'hbs',
+    engine({
+        extname: 'hbs', /** Estensione dei file FE da gestire */
+        layoutsDir: './views/layouts' /** Cartella nella quale si trovano i file da gestire */
+    }));
+app.set('view engine', 'hbs'); /** Set dell'engine che si occuperà delle views */
+
+/** res.render indica che quando si naviga al path '/' viene renderizzato il template html "index.hbs" presente
+ * nella cartella views */
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
+

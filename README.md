@@ -29,6 +29,11 @@ async function initModelsDBTables(isFirstCreation) {
 }
 
 SEEDERS \
-I seeders sono degli "alimentatori" che forniscono dei dati per riempire il DB per motivi di test o altre operazioni. Si possono creare e lanciare tramite i comandi "sequelize-cli" lanciati dal terminale (sequelize-cli -h per vedere tutti i comandi che si possono utilizzare). Si può utilizzare la librearia "faker" per creare dei dati fake realistici.
+I seeders sono degli "alimentatori" che forniscono dei dati per riempire il DB per motivi di test o altre operazioni. Si possono creare e lanciare tramite i comandi "sequelize-cli" lanciati dal terminale (sequelize-cli -h per vedere tutti i comandi che si possono utilizzare). Si può utilizzare la librearia "faker" per creare dei dati fake realistici. \
+
+FE \
+Per la parte FE, ci sono varie possibilità di sviluppare app FE con node e in questo tutorial vedremo express-handlebars che possiamo installare con "npm i express-handlebars". \
+Nell'index.js bisogna inizializzare l'istanza di express-handlebars in modo tale che riconosca quali sono i file FE che deve gestire e la cartella dove sono contenuti (ovviamente si possono passare altre configurazioni). Per fare questo bisogna aggiungere il seguente codice: \
+
 
 

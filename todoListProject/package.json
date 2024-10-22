@@ -11,6 +11,7 @@
   "dependencies": {
     "@faker-js/faker": "^9.0.3",
     "express": "^4.21.1",
+    "express-handlebars": "6.0.6",
     "mysql2": "^3.11.3",
     "sequelize": "^6.37.4"
   }
