@@ -5,7 +5,7 @@ const mockData = require('../mocks/data.json');
 const dbConnection = require('../dbConfig');
 
 const List = require('../models').List;
-const queryAttributes = ['id', 'name', 'user_id', 'created_at'];
+const queryAttributes = ['id', 'name', 'user_id', 'created_at', 'updated_at'];
 
 /** FUNZIONI PER LA GESTIONE DEI DATI */
 
