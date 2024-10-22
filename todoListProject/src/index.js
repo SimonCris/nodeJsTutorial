@@ -46,6 +46,9 @@ app.listen(4000, () => { console.log('listening on port 4000') });
 /** FE */
 /** Inizializzazione di express-handlebars per la gestione delle pagine FE */
 const {engine} = require('express-handlebars');
+/** Aggiunta di bootstrap per lo styles FE per i file statici */
+app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
+
 app.engine(
     'hbs',
     engine({
@@ -53,6 +56,7 @@ app.engine(
         layoutsDir: './views/layouts' /** Cartella nella quale si trovano i file da gestire */
     }));
 app.set('view engine', 'hbs'); /** Set dell'engine che si occuperà delle views */
+
 
 /** res.render indica che quando si naviga al path '/' viene renderizzato il template html "index.hbs" presente
  * nella cartella views */

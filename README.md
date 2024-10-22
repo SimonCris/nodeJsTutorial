@@ -36,4 +36,24 @@ Per la parte FE, ci sono varie possibilità di sviluppare app FE con node e in q
 Nell'index.js bisogna inizializzare l'istanza di express-handlebars in modo tale che riconosca quali sono i file FE che deve gestire e la cartella dove sono contenuti (ovviamente si possono passare altre configurazioni). Per fare questo bisogna aggiungere il seguente codice: \
 
 
+/** Inizializzazione di express-handlebars per la gestione delle pagine FE */ \
+const {engine} = require('express-handlebars'); \
+app.engine(
+'hbs',
+engine({
+extname: 'hbs', /** Estensione dei file FE da gestire */
+layoutsDir: './views/layouts' /** Cartella nella quale si trovano i file da gestire */
+})); \
+app.set('view engine', 'hbs'); /** Set dell'engine che si occuperà delle views */
+
+/** res.render indica che quando si naviga al path '/' viene renderizzato il template html "index.hbs" (bisogna crearlo manualmente) nella cartella views */ \
+  app.get('/', (req, res) => {
+  res.render('index');
+  }); 
+
+Tutte le componenti FE sono state create e implementate nella directory "src/views". \
+Nello specifico, nella cartella "layouts" è presente il file "main.hbs" che rappresenta il nodo di origine della parte FE. Nella cartella "partials" invece ci sono i file ".hbs" che compongono i vari componenti HTML che si vogliono inserire nell'applicativo. Infine, il file "index.hbs" rappresenta il body dell'applicazione FE. \
+.
+
+
 
