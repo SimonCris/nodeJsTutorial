@@ -4,8 +4,24 @@ const mockData = require('../mocks/data.json');
 /** Import dell'istanza della connessione al DB */
 const dbConnection = require('../dbConfig');
 
+const Todo = require('../models').Todo;
 const List = require('../models').List;
-const queryAttributes = ['id', 'name', 'user_id', 'created_at', 'updated_at'];
+/** Passando include possiamo creare una funzione nella query (ad es. COUNT, SUM, ecc).
+ * In questo caso vogliamo ritornare il numero totale dei todos attribuiti ad una lista.
+ * - Bisogna specificare la funzione (fn) da chiamare
+ * - La tabella su cui applicarla (lists)
+ * - La colonna da contare e in questo caso per specificare la colonna dei todos dobbiamo puntare alla tabella todos e specificando il campo id
+ * - Inserire l'alias con cui vogliamo chiamare la variabile derivata dal COUNT, in questo caso "total" */
+const queryAttributes = {
+    include: [ /** Colonne e altri campi da includere nel result della query */
+        [
+            List.sequelize.fn('COUNT', List.sequelize.col('Todos.id')), 'total'
+        ]
+    ],
+    exclude: [ /** Colonne da escludere dal result della query */
+        'created_at', 'updated_at'
+    ]
+}
 
 /** FUNZIONI PER LA GESTIONE DEI DATI */
 
@@ -42,6 +58,16 @@ async function getLists() {
         /** where: { Esempio di clausola where da passare alla query
             id: 1
         } */
+        subQuery: false, /** Non permette sotto-query e quindi troppe colonne in caso di join */
+        include: [ /** array che contiene i model che servono per la query in caso di join (in questo caso la tabella todos) */
+            {
+                model: Todo,
+                attributes: [] /** Array vuoto significa che in questa join non vogliamo attributi */
+            }
+        ],
+        group: [
+            'List.id'
+        ]
 
     });
 }

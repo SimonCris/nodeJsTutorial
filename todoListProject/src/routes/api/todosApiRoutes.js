@@ -1,6 +1,6 @@
 const express = require('express');
-const todosController = require('../controllers/todosController');
-const listController = require("../controllers/listsController");
+const todosController = require('../../controllers/todosController');
+const listController = require("../../controllers/listsController");
 
 /** Router che gestisce tutte le rotte */
 const router = express.Router();
@@ -45,7 +45,7 @@ router.use((req, resp, next) => {
 
 /** ROTTE */
 
-/** Rotta standard (equivale a 'todos/') */
+/** Rotta standard (equivale a '/api/todos/') */
 router.get('/', loggerMiddleware, async (req, resp) => {
 
     try {
@@ -57,7 +57,7 @@ router.get('/', loggerMiddleware, async (req, resp) => {
 
 });
 
-/** Rotta standard (equivale a 'todos/') */
+/** Rotta standard (equivale a '/api/todos/') */
 router.post('/', loggerMiddleware, async (req, resp) => {
 
     try {
@@ -69,7 +69,7 @@ router.post('/', loggerMiddleware, async (req, resp) => {
 
 });
 
-/** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3' )'.
+/** Rotta con l'id (equivale a '/api//todos/IdDelTodos' ad es. '/api//todos/3' )'.
  * In questa rotta vengono concatenati due middleware.
  * Con questa get viene restituito il todos che ha id uguale a quello passato come parametro nella request */
 router.get('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req, resp) => {
@@ -83,7 +83,7 @@ router.get('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req, 
 
 }]);
 
-/** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3')'.
+/** Rotta con l'id (equivale a '/api//todos/IdDelTodos' ad es. '/api//todos/3')'.
  * In questa rotta vengono concatenati due middleware.
  * Con questa delete viene restituito il todos che ha id uguale a quello passato come parametro nella request */
 router.delete('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req, resp) => {
@@ -97,7 +97,7 @@ router.delete('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (re
 
 }]);
 
-/** Rotta con l'id (equivale a '/todos/IdDelTodos' ad es. '/todos/3')'.
+/** Rotta con l'id (equivale a '/api//todos/IdDelTodos' ad es. '/api//todos/3')'.
  * Con questa update viene modificato e restituito il todos che ha id uguale a quello passato come parametro nella request */
 router.patch('/:id([0-9]+)', [loggerMiddleware, validateIdMiddleware, async (req, resp) => {
 

@@ -2,17 +2,19 @@ const express = require('express');
 const app = express();
 const { sequelize } = require('./models');
 
+/** BE */
+
 /** Middleware di express che permette di mappare i parametri provenienti dal body di una chiamata al server */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-/** Per tutte le rotte di todos viene utilizzato il router todosRoutes nel formato '/todos/altreRotte' */
-const todosRoutes = require('./routes/todosRoutes');
-app.use('/todos', todosRoutes);
+/** Per identificare le rotte dei singoli servizi BE per i TODOS viene usato il router todosAPIRoutes nel formato '/todos/altreRotte' */
+const todosAPIRoutes = require('./routes/api/todosApiRoutes');
+app.use('/api/todos', todosAPIRoutes);
 
-/** Per tutte le rotte di lists viene utilizzato il router listsRoutes nel formato '/lists/altreRotte' */
-const listsRoutes = require('./routes/listsRoutes');
-app.use('/lists', listsRoutes);
+/** Per identificare le rotte dei singoli servizi BE per le LISTE viene usato il router listsAPIRoutes nel formato '/lists/altreRotte' */
+const listsAPIRoutes = require('./routes/api/listsApiRoutes');
+app.use('/api/lists', listsAPIRoutes);
 
 /** Init delle tabelle a DB a partire dai models creati nell'applicativo */
 /** Inizializzazione delle tabelle DB */
@@ -43,6 +45,8 @@ async function initModelsDBTables(isFirstCreation) {
 
 app.listen(4000, () => { console.log('listening on port 4000') });
 
+/** FINE BE */
+
 /** FE */
 /** Inizializzazione di express-handlebars per la gestione delle pagine FE */
 const {engine} = require('express-handlebars');
@@ -57,11 +61,9 @@ app.engine(
     }));
 app.set('view engine', 'hbs'); /** Set dell'engine che si occuperà delle views */
 
+/** Routing */
+/** Per identificare le rotte FE per LISTS viene usato il router listsViewRoutes nel formato '/lists/altreRotte' */
+const listsViewRoutes = require('./routes/feViews/listsViewRoutes');
+app.use(['/', '/lists'], listsViewRoutes);
 
-/** res.render indica che quando si naviga al path '/' viene renderizzato il template html "index.hbs" presente
- * nella cartella views */
-app.get('/', (req, res) => {
-    res.render('index');
-});
-
-
+/** FINE FE */
