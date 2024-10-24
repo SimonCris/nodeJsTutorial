@@ -19,7 +19,7 @@ async function addLists(listsParams) {
 
     /** Aggiunta dei dati utilizzando i metodi sequelize */
     return await List.create({
-        user_id: listsParams.user_id,
+        user_id: listsParams.user_id ? listsParams.user_id : null,
         name: listsParams.name,
         created_at: new Date()
     })
@@ -68,8 +68,10 @@ async function getLists() {
         ],
         group: [
             'List.id'
+        ],
+        order: [
+            ['created_at', 'DESC']
         ]
-
     });
 }
 

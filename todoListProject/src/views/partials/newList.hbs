@@ -1,0 +1,30 @@
+<h1>NEW LIST</h1>
+
+<script>
+
+    /** Ritorna all'elenco delle liste */
+    function backToLists() {
+        window.location.href = '/';
+    }
+
+</script>
+<form method="post" action="/" name="list" id="list">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="input-group mb-3 form-group">
+                <input name="list_name" type="text" class="form-control" placeholder="List name"
+                       aria-label="List name" id="inputListName">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" value="SAVE" title="Insert list">
+                <i class="fa-solid fa-floppy-disk"></i>
+            </button>
+
+            <!--<button class="btn btn-danger" title="Back to list" value="BACK" onclick="backToLists()">
+                <i class="fa fa-trash-alt"></i>
+            </button>-->
+        </div>
+    </div>
+</form>
+

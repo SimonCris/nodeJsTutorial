@@ -91,4 +91,16 @@ listsViewRouter.patch('/:list_id([0-9]+)', async (req,resp) =>{
     }
 });
 
+/** Rotta con l'id (equivale a '/IdDellaList' ad es. '/1')'.
+ * Con questo metodo aggiunge una nuova lista e viene effettuato il redirect alla sezione delle liste */
+listsViewRouter.post('/', async (req,resp) =>{
+    try{
+        await listController.addLists({name: req.body.list_name, user_id: 21});
+        resp.redirect('/');
+        // resp.status(deleted ? 200 : 404).json(deleted ? deleted : null);
+    } catch (e) {
+        // resp.status(500).send(e.toString());
+    }
+});
+
 module.exports = listsViewRouter;

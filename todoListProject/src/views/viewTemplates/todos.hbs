@@ -1,9 +1,13 @@
 <h1>TODOS BY LIST : {{list_name}}</h1>
 
 <ul>
-    {{#each todosList}}
-        <li>
-            {{this.dataValues.todo}}
-        </li>
-    {{/each}}
+    {{#if todosList}}
+        {{#each todosList}}
+            <li>
+                {{this.dataValues.todo}}
+            </li>
+        {{/each}}
+    {{else}}
+        <h3 class="text-danger">No todos found</h3>
+    {{/if}}
 </ul>

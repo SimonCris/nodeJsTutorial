@@ -53,7 +53,7 @@ app.set('view engine', 'hbs'); /** Set dell'engine che si occuperà delle views 
 
 Tutte le componenti FE sono state create e implementate nella directory "src/views". \
 Nello specifico, nella cartella "layouts" è presente il file "main.hbs" che rappresenta il nodo di origine della parte FE. Nella cartella "partials" invece ci sono i file ".hbs" che compongono i vari componenti HTML che si vogliono inserire nell'applicativo. Infine, il file "index.hbs" rappresenta il body dell'applicazione FE. \
-.
+I componenti partials che si aggiungono devono stare tutti nella cartella partials
 
 
 
