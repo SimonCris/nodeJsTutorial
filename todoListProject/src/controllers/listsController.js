@@ -6,22 +6,6 @@ const dbConnection = require('../dbConfig');
 
 const Todo = require('../models').Todo;
 const List = require('../models').List;
-/** Passando include possiamo creare una funzione nella query (ad es. COUNT, SUM, ecc).
- * In questo caso vogliamo ritornare il numero totale dei todos attribuiti ad una lista.
- * - Bisogna specificare la funzione (fn) da chiamare
- * - La tabella su cui applicarla (lists)
- * - La colonna da contare e in questo caso per specificare la colonna dei todos dobbiamo puntare alla tabella todos e specificando il campo id
- * - Inserire l'alias con cui vogliamo chiamare la variabile derivata dal COUNT, in questo caso "total" */
-const queryAttributes = {
-    include: [ /** Colonne e altri campi da includere nel result della query */
-        [
-            List.sequelize.fn('COUNT', List.sequelize.col('Todos.id')), 'total'
-        ]
-    ],
-    exclude: [ /** Colonne da escludere dal result della query */
-        'created_at', 'updated_at'
-    ]
-}
 
 /** FUNZIONI PER LA GESTIONE DEI DATI */
 
@@ -47,6 +31,23 @@ async function getLists() {
     /** Il metodo query restituisce un array chiamato "result" contenente i dati recuperati dalla query. Ritorna anche
      * un altro array chiamato "fields" contenente le colonne della tabella */
     // const [result] = await dbConnection.query('SELECT * FROM lists');
+
+    /** Passando include possiamo creare una funzione nella query (ad es. COUNT, SUM, ecc).
+     * In questo caso vogliamo ritornare il numero totale dei todos attribuiti ad una lista.
+     * - Bisogna specificare la funzione (fn) da chiamare
+     * - La tabella su cui applicarla (lists)
+     * - La colonna da contare e in questo caso per specificare la colonna dei todos dobbiamo puntare alla tabella todos e specificando il campo id
+     * - Inserire l'alias con cui vogliamo chiamare la variabile derivata dal COUNT, in questo caso "total" */
+    const queryAttributes = {
+        include: [ /** Colonne e altri campi da includere nel result della query */
+            [
+                List.sequelize.fn('COUNT', List.sequelize.col('Todos.id')), 'total'
+            ]
+        ],
+        exclude: [ /** Colonne da escludere dal result della query */
+            'created_at', 'updated_at'
+        ]
+    }
 
     /** Recupero dei dati utilizzando i metodi sequelize */
     return await List.findAll({
@@ -80,6 +81,9 @@ async function getListById(id) {
     // const [result] = await dbConnection.query('SELECT * FROM lists WHERE id = ?', [id]);
     // return result[0];
 
+    /** Colonne che vogliamo siano restituite nella query */
+    const queryAttributes = ['id', 'name', 'user_id'];
+
     /** Recupero dei dati utilizzando i metodi sequelize */
     return await List.findByPk(id, {
         attributes: queryAttributes
@@ -95,7 +99,7 @@ async function deleteListById(id) {
 
     /** Delete dei dati utilizzando i metodi sequelize */
     return await List.destroy({
-        attributes: queryAttributes,
+        attributes: [],
         where: {
             id: id
         }

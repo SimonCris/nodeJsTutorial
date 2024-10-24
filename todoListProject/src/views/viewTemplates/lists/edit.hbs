@@ -1,0 +1,31 @@
+<h1>EDIT LIST</h1>
+
+<script>
+    function updateList(btn) {
+        const method = document.getElementById('method');
+        const form = document.getElementById('list');
+        btn.value === 'DELETE' ? method.value = 'DELETE': method.value = 'PATCH';
+        form.submit();
+    }
+</script>
+<form method="post" action="/{{list.dataValues.id}}" name="list"  id="list">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="input-group mb-3 form-group">
+                <input name="list_name" type="text" class="form-control" placeholder="List name"
+                       aria-label="List name" value="{{ list.dataValues.name }}" id="inputListName">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" value="PATCH" onclick="updateList(this); return false">
+                <i class="fa fa-pen-alt"></i>
+            </button>
+
+            <input type="hidden" name="_method"  id="method"  value="DELETE">
+            <button class="btn btn-danger" title="Delete List" value="DELETE" onclick="updateList(this); return false">
+                <i class="fa fa-trash-alt"></i>
+            </button>
+        </div>
+    </div>
+</form>
+

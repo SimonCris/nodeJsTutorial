@@ -8,6 +8,19 @@ const { sequelize } = require('./models');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+/** Method-Override crea una nuova funzione middleware per sovrascrivere la proprietà req.method con un nuovo valore.
+ * Se ad esempio il type di un form è "post", possiamo sovrascriverlo cambiandolo in "delete" in modo tale
+ * che venga fatta una chiamata con un metodo DELETE e venga intercettata da una determinata rotta. (esempio di override in edit.hbs) */
+const methodOverride = require('method-override');
+app.use(methodOverride(function (req) {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+
+        const method = req.body._method
+        delete req.body._method
+        return method
+    }
+}))
+
 /** Per identificare le rotte dei singoli servizi BE per i TODOS viene usato il router todosAPIRoutes nel formato '/todos/altreRotte' */
 const todosAPIRoutes = require('./routes/api/todosApiRoutes');
 app.use('/api/todos', todosAPIRoutes);

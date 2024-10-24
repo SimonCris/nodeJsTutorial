@@ -3,16 +3,35 @@
 <ul class="list-group">
     {{#each lists}}
         <li class="list-group-item d-flex justify-content-between align-items-center row">
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <a href="/lists/{{this.dataValues.id}}/todos">
                     {{this.dataValues.name}}
                 </a>
                 <span class="badge bg-danger">{{ this.dataValues.total }}</span>
             </div>
-            <div class="col-md-3">
-                <button class="btn btn-danger">Delete</button>
-                <button class="btn btn-success">Update</button>
+            <div class="col-md-2">
+                <input type="hidden" name="_method" value="DELETE">
+                <button class="btn btn-danger" title="Delete List" onclick="goToDeleteList({{this.dataValues.id}})">
+                    <i class="fa fa-trash-alt"></i>
+                </button>
+                <button class="btn btn-success" title="Update List" onclick="goToUpdateList({{this.dataValues.id}})">
+                    <i class="fa fa-pen-alt"></i>
+                </button>
             </div>
         </li>
     {{/each}}
 </ul>
+
+<script>
+
+    /** Redirect sulla rotta di UPDATE di una lista */
+    function goToUpdateList(list_id) {
+        window.location.href = '/' + list_id + '/edit';
+    }
+
+    /** Redirect sulla rotta di DELETE di una lista */
+    function goToDeleteList(list_id) {
+        window.location.href = '/' + list_id + '/delete';
+    }
+
+</script>
