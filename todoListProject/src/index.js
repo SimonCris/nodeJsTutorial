@@ -82,8 +82,17 @@ app.listen(4000, () => { console.log('listening on port 4000') });
 /** FE */
 /** Inizializzazione di express-handlebars per la gestione delle pagine FE */
 const {engine} = require('express-handlebars');
-/** Aggiunta di bootstrap per lo styles FE per i file statici */
-app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
+
+/** Aggiunta del riferimento alla cartella public per i file statici */
+app.use(express.static(__dirname + '/public'));
+
+app.engine(
+    'hbs',
+    engine({
+        extname: 'hbs',
+        layoutsDir: './views/layouts'
+    }));
+app.use('sweetalert2', express.static(__dirname + '/node_modules/sweetalert2/dist'));
 
 app.engine(
     'hbs',
