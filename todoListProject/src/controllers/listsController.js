@@ -6,6 +6,7 @@ const dbConnection = require('../dbConfig');
 
 const Todo = require('../models').Todo;
 const List = require('../models').List;
+const Op = require('../models').Sequelize.Op;
 
 /** FUNZIONI PER LA GESTIONE DEI DATI */
 
@@ -26,8 +27,11 @@ async function addLists(listsParams) {
 
 }
 
-/** Funzione che ritorna tutte le liste */
-async function getLists() {
+/**
+ * Funzione che ritorna tutte le liste
+ * @param params -> Oggetto contenente possibili parametri passati in input
+ */
+async function getLists(params) {
     /** Il metodo query restituisce un array chiamato "result" contenente i dati recuperati dalla query. Ritorna anche
      * un altro array chiamato "fields" contenente le colonne della tabella */
     // const [result] = await dbConnection.query('SELECT * FROM lists');
@@ -48,6 +52,14 @@ async function getLists() {
             'created_at', 'updated_at'
         ]
     }
+
+    /** Contiene eventuali valori per la where condition della query */
+    const whereAttributes = params.searchParam ? {
+        name: {
+            /** Per la lista di tutti gli operatori di Sequelize, vedere docs */
+            [Op.like]: '%' + params.searchParam + '%'
+        }
+    } : {};
 
     /** Recupero dei dati utilizzando i metodi sequelize */
     return await List.findAll({
@@ -71,7 +83,9 @@ async function getLists() {
         ],
         order: [
             ['created_at', 'DESC']
-        ]
+        ],
+        where: whereAttributes
+
     });
 }
 

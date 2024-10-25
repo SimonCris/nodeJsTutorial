@@ -11,10 +11,17 @@ const listsViewRouter = express.Router();
 listsViewRouter.get('/', async (req, resp) => {
 
     try {
-        const lists = await listController.getLists();
+        const searchAttributes = req.query.searchParam ?
+              {
+                  searchParam: req.query.searchParam
+              } : {};
+        const lists = await listController.getLists(searchAttributes);
         /** Il metodo .render permette di graficare il template HTML che vogliamo, in questo caso index.hbs e
          *  prende in input anche eventuali parametri (che vengono passati come json) come, in questo caso, l'array delle liste. */
-        resp.render('viewTemplates/index', {lists: lists});
+        resp.render('viewTemplates/index', {
+            lists: lists, /** Lista aggiornata delle liste */
+            successMessages: req.flash('successMessages') /** Recupero del messaggio dalla sessione (Messaggio impostato nella rotta relativa all'aggiunta di una nuova lista) */
+        });
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -60,9 +67,8 @@ listsViewRouter.get('/:list_id([0-9]+)/delete', async (req, resp) => {
     try{
         await listController.deleteListById(req.params.list_id);
         resp.redirect('/');
-        // resp.status(deleted ? 200 : 404).json(deleted ? deleted : null);
     } catch (e) {
-        // resp.status(500).send(e.toString());
+        resp.status(500).send(e.toString());
     }
 
 });
@@ -73,9 +79,8 @@ listsViewRouter.delete('/:list_id([0-9]+)', async (req,resp) =>{
     try{
         await listController.deleteListById(req.params.list_id);
         resp.redirect('/');
-        // resp.status(deleted ? 200 : 404).json(deleted ? deleted : null);
     } catch (e) {
-        // resp.status(500).send(e.toString());
+        resp.status(500).send(e.toString());
     }
 });
 
@@ -85,9 +90,8 @@ listsViewRouter.patch('/:list_id([0-9]+)', async (req,resp) =>{
     try{
         await listController.updateListById(req.params.list_id, {name: req.body.list_name});
         resp.redirect('/');
-        // resp.status(deleted ? 200 : 404).json(deleted ? deleted : null);
     } catch (e) {
-        // resp.status(500).send(e.toString());
+        resp.status(500).send(e.toString());
     }
 });
 
@@ -96,10 +100,10 @@ listsViewRouter.patch('/:list_id([0-9]+)', async (req,resp) =>{
 listsViewRouter.post('/', async (req,resp) =>{
     try{
         await listController.addLists({name: req.body.list_name, user_id: 21});
+        req.flash('successMessages', 'List added!'); /** Set del messaggio nella sessione lato server */
         resp.redirect('/');
-        // resp.status(deleted ? 200 : 404).json(deleted ? deleted : null);
     } catch (e) {
-        // resp.status(500).send(e.toString());
+        resp.status(500).send(e.toString());
     }
 });
 

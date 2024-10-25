@@ -25,8 +25,9 @@
                     <a class='nav-link' href='/todos'>Todos</a>
                 </li>
             </ul>
-            <form class='d-flex' role='search'>
+            <form class='d-flex pt-2' role='search' method="get">
                 <input
+                        name="searchParam"
                         class='form-control me-2'
                         type='search'
                         placeholder='Search'
@@ -36,6 +37,11 @@
                         class='btn btn-outline-success'
                         type='submit'
                 >Search</button>
+                <button
+                        onclick="this.parentNode.searchParam.value = ''"
+                        class='btn btn-outline-danger mx-2'
+                        type='submit'
+                >Reset</button>
             </form>
         </div>
     </div>

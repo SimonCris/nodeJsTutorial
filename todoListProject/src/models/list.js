@@ -33,7 +33,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       index: true,
-      unique: true
+      unique: true,
+      validate: { /** Validatori di Sequelize (vedere docs per la lista completa dei validatori)*/
+        notEmpty: {
+          msg: 'Column name is not empty.'
+        },
+        len: {
+          args: [6, 255],
+          msg: 'Column name must be between 6 and 255 characters long.'
+        }
+      }
     }
   }, {
     sequelize,

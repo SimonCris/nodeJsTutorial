@@ -2,11 +2,30 @@ const express = require('express');
 const app = express();
 const { sequelize } = require('./models');
 
+/** COSTANTI */
+const MAX_AGE = process.env.MAX_AGE || 60*60*1000;
+const SECRET_KEY = process.env.SECRET_KEY || 'Our secret';
+const DEFAULT_ENV = process.env.DEFAULT_ENV || 'Development';
+
 /** BE */
 
 /** Middleware di express che permette di mappare i parametri provenienti dal body di una chiamata al server */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+/** Inizializzazione della session di express lato server */
+const flash = require('connect-flash');
+const session = require('express-session');
+app.use(session({
+    cookie: { /** Impostazioni del cookie che viene creato dal server */
+        maxAge: MAX_AGE, /** Scadenza del cookie */
+        secure: DEFAULT_ENV === 'production' /** Specifica se il cookie deve essere inviato tramite HTTPS (in questo caso questo avviene solo in produzione) */
+    },
+    secret: SECRET_KEY, /** Secret key con la quale il server firma il cookie */
+    resave: false, /** Campo che specifica se la sessione deve essere risalvata per ogni richiesta effettuata (chiamata ai servizi) */
+    saveUninitialized: false /** Campo che specifica se la sessione deve venire salvata anche quando non ci sono dati */
+}));
+app.use(flash());
 
 /** Method-Override crea una nuova funzione middleware per sovrascrivere la proprietà req.method con un nuovo valore.
  * Se ad esempio il type di un form è "post", possiamo sovrascriverlo cambiandolo in "delete" in modo tale

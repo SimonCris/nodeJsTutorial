@@ -1,17 +1,30 @@
-{{>newList}}
+{{>newList }}
+
+<!-- MESSAGGI DI SUCCESSO MEMORIZZATI NELLA SESSION LATO SERVER TRAMITE FLASH
+    I Messaggi recuperati da req.flash quando si atterra sulla rotta '/'.
+    Guardare il file listsViewRoutes.js, rotta GET '/'. -->
+{{#if successMessages}}
+    {{#each successMessages}}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{this}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{/each}}
+{{/if}}
 
 <h1>LISTS</h1>
 <ul class="list-group">
     {{#each lists}}
         <li class="list-group-item d-flex justify-content-between align-items-center row">
             <div class="col-md-10">
-                <a href="/{{this.dataValues.id}}/todos">
-                    {{this.dataValues.name}}
-                </a>
+                <span> {{this.dataValues.name}} </span>
                 <span class="badge bg-danger">{{ this.dataValues.total }}</span>
             </div>
             <div class="col-md-2">
                 <input type="hidden" name="_method" value="DELETE">
+                <button class="btn btn-dark" title="List Detail" onclick="goToListDetail({{this.dataValues.id}})">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
                 <button class="btn btn-danger" title="Delete List" onclick="goToDeleteList({{this.dataValues.id}})">
                     <i class="fa fa-trash-alt"></i>
                 </button>
@@ -33,6 +46,11 @@
     /** Redirect sulla rotta di DELETE di una lista */
     function goToDeleteList(list_id) {
         window.location.href = '/' + list_id + '/delete';
+    }
+
+    /** Redirect sulla rotta di DELETE di una lista */
+    function goToListDetail(list_id) {
+        window.location.href = '/' + list_id + '/todos';
     }
 
 </script>
