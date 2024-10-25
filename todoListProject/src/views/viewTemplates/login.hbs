@@ -1,0 +1,31 @@
+<h2>Login</h2>
+
+<form action="/auth/register" method="post" onsubmit="registerUser(this); return false;">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password">
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+<script>
+
+    /**
+     * Metodo che inizia la registrazione di un nuovo utente
+     * @param form
+     */
+    function registerUser(form) {
+        alert(form.name.value);
+    }
+
+</script>

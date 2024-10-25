@@ -18,17 +18,43 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      index: true
+      index: true,
+      validate: {
+        notEmpty: {
+          msg: 'Column name cannot be empty'
+        }
+      }
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      index: true
+      index: true,
+      unique: {
+        args: true, /** A true abilita la visualizzazione del msg in caso di errore a DB */
+        msg: 'Email already exists'
+      },
+      validate: {
+        notEmpty: {
+          msg: 'Column name cannot be empty'
+        },
+        isEmail: {
+          msg: 'Add a valid email format'
+        }
+      }
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      index: true
+      index: true,
+      validate: {
+        notEmpty: {
+          msg: 'Column name cannot be empty'
+        },
+        len: {
+          args: [6, 255],
+          msg: 'Password must be between 6 and 255 characters long'
+        }
+      }
     }
   }, {
     sequelize,
