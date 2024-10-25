@@ -67,9 +67,12 @@ listsViewRouter.get('/:list_id([0-9]+)/delete', async (req, resp) => {
 
     try{
         await listController.deleteListById(req.params.list_id);
+        req.flash('successMessages', 'List deleted!'); /** Set del messaggio nella sessione lato server */
         resp.redirect('/');
-    } catch (e) {
-        resp.status(500).send(e.toString());
+    } catch (error) {
+        req.flash('errorMessages', error.errors.map(err => err.message)); /** Set del messaggio nella sessione lato server */
+        resp.redirect('/');
+        // resp.status(500).send(e.toString());
     }
 
 });
@@ -79,9 +82,12 @@ listsViewRouter.get('/:list_id([0-9]+)/delete', async (req, resp) => {
 listsViewRouter.delete('/:list_id([0-9]+)', async (req,resp) =>{
     try{
         await listController.deleteListById(req.params.list_id);
+        req.flash('successMessages', 'List deleted!'); /** Set del messaggio nella sessione lato server */
         resp.redirect('/');
-    } catch (e) {
-        resp.status(500).send(e.toString());
+    } catch (error) {
+        req.flash('errorMessages', error.errors.map(err => err.message)); /** Set del messaggio nella sessione lato server */
+        resp.redirect('/');
+        // resp.status(500).send(e.toString());
     }
 });
 
