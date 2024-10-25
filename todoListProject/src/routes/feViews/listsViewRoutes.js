@@ -90,9 +90,16 @@ listsViewRouter.delete('/:list_id([0-9]+)', async (req,resp) =>{
 listsViewRouter.patch('/:list_id([0-9]+)', async (req,resp) =>{
     try{
         await listController.updateListById(req.params.list_id, {name: req.body.list_name});
+        req.flash('successMessages', 'List modified!'); /** Set del messaggio nella sessione lato server */
         resp.redirect('/');
-    } catch (e) {
-        resp.status(500).send(e.toString());
+    } catch (error) {
+        req.flash('errorMessages', error.errors.map(err => err.message)); /** Set del messaggio nella sessione lato server */
+        const list = await listController.getListById(req.params.list_id);
+        resp.render('viewTemplates/lists/edit', {
+            list: list,
+            errorMessages: req.flash('errorMessages')
+        });
+        // resp.status(500).send(error.toString());
     }
 });
 
@@ -104,7 +111,7 @@ listsViewRouter.post('/', async (req,resp) =>{
         req.flash('successMessages', 'List added!'); /** Set del messaggio nella sessione lato server */
         resp.redirect('/');
     } catch (error) {
-        req.flash('errorMessages', error.errors.map(err => err.message));
+        req.flash('errorMessages', error.errors.map(err => err.message)); /** Set del messaggio nella sessione lato server */
         resp.redirect('/');
         // resp.status(500).send(error.toString());
     }

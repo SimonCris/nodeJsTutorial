@@ -29,3 +29,17 @@
     </div>
 </form>
 
+<div>
+    <!-- MESSAGGI DI SUCCESSO ED ERRORE MEMORIZZATI NELLA SESSION LATO SERVER TRAMITE FLASH
+    I Messaggi recuperati da req.flash quando si atterra sulla rotta '/idLista'.
+    Guardare il file listsViewRoutes.js, rotta PATCH '/idLista)'. -->
+    {{#if errorMessages}}
+        {{#each errorMessages}}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{this}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {{/each}}
+    {{/if}}
+</div>
+
