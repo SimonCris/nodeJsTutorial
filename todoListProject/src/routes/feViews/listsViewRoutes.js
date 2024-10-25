@@ -20,7 +20,8 @@ listsViewRouter.get('/', async (req, resp) => {
          *  prende in input anche eventuali parametri (che vengono passati come json) come, in questo caso, l'array delle liste. */
         resp.render('viewTemplates/index', {
             lists: lists, /** Lista aggiornata delle liste */
-            successMessages: req.flash('successMessages') /** Recupero del messaggio dalla sessione (Messaggio impostato nella rotta relativa all'aggiunta di una nuova lista) */
+            successMessages: req.flash('successMessages'), /** Recupero del messaggio dalla sessione (Messaggio impostato nella rotta relativa all'aggiunta di una nuova lista) */
+            errorMessages: req.flash('errorMessages') /** Recupero dei messaggi di errori dalla sessione (Messaggio impostato nella rotta relativa all'aggiunta di una nuova lista) */
         });
     } catch (err) {
         resp.status(500).send(err.message);
@@ -102,8 +103,10 @@ listsViewRouter.post('/', async (req,resp) =>{
         await listController.addLists({name: req.body.list_name, user_id: 21});
         req.flash('successMessages', 'List added!'); /** Set del messaggio nella sessione lato server */
         resp.redirect('/');
-    } catch (e) {
-        resp.status(500).send(e.toString());
+    } catch (error) {
+        req.flash('errorMessages', error.errors.map(err => err.message));
+        resp.redirect('/');
+        // resp.status(500).send(error.toString());
     }
 });
 

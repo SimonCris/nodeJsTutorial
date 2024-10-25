@@ -1,11 +1,19 @@
 {{>newList }}
 
-<!-- MESSAGGI DI SUCCESSO MEMORIZZATI NELLA SESSION LATO SERVER TRAMITE FLASH
+<!-- MESSAGGI DI SUCCESSO ED ERRORE MEMORIZZATI NELLA SESSION LATO SERVER TRAMITE FLASH
     I Messaggi recuperati da req.flash quando si atterra sulla rotta '/'.
     Guardare il file listsViewRoutes.js, rotta GET '/'. -->
 {{#if successMessages}}
     {{#each successMessages}}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{this}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{/each}}
+{{/if}}
+{{#if errorMessages}}
+    {{#each errorMessages}}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{this}}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
