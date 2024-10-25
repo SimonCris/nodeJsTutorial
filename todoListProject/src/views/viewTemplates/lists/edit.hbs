@@ -8,12 +8,13 @@
         form.submit();
     }
 </script>
+
 <form method="post" action="/{{list.dataValues.id}}" name="list"  id="list">
     <div class="row">
         <div class="col-md-10">
             <div class="input-group mb-3 form-group">
                 <input name="list_name" type="text" class="form-control" placeholder="List name"
-                       aria-label="List name" value="{{ list.dataValues.name }}" id="inputListName">
+                       aria-label="List name" value="{{ list.dataValues.name }}" id="inputListName" required>
             </div>
         </div>
         <div class="col-md-2">
