@@ -1,11 +1,12 @@
 const express = require('express');
 const app = express();
 const { sequelize } = require('./models');
-
-/** COSTANTI */
-const MAX_AGE = process.env.MAX_AGE || 60*60*1000;
-const SECRET_KEY = process.env.SECRET_KEY || 'Our secret';
-const DEFAULT_ENV = process.env.DEFAULT_ENV || 'Development';
+const {
+    redirectToHome,
+    redirectToLogin,
+    initSession,
+    initMethodOverride
+} = require('./middlewares/index');
 
 /** BE */
 
@@ -13,40 +14,21 @@ const DEFAULT_ENV = process.env.DEFAULT_ENV || 'Development';
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-/** Inizializzazione della session di express lato server */
 const flash = require('connect-flash');
-const session = require('express-session');
-app.use(session({
-    cookie: { /** Impostazioni del cookie che viene creato dal server */
-        maxAge: MAX_AGE, /** Scadenza del cookie */
-        secure: DEFAULT_ENV === 'production' /** Specifica se il cookie deve essere inviato tramite HTTPS (in questo caso questo avviene solo in produzione) */
-    },
-    secret: SECRET_KEY, /** Secret key con la quale il server firma il cookie */
-    resave: false, /** Campo che specifica se la sessione deve essere risalvata per ogni richiesta effettuata (chiamata ai servizi) */
-    saveUninitialized: false /** Campo che specifica se la sessione deve venire salvata anche quando non ci sono dati */
-}));
+
+app.use(initSession());
 app.use(flash());
+app.use(initMethodOverride());
 
-/** Method-Override crea una nuova funzione middleware per sovrascrivere la proprietà req.method con un nuovo valore.
- * Se ad esempio il type di un form è "post", possiamo sovrascriverlo cambiandolo in "delete" in modo tale
- * che venga fatta una chiamata con un metodo DELETE e venga intercettata da una determinata rotta. (esempio di override in edit.hbs) */
-const methodOverride = require('method-override');
-app.use(methodOverride(function (req) {
-    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-
-        const method = req.body._method
-        delete req.body._method
-        return method
-    }
-}))
-
-/** Per identificare le rotte dei singoli servizi BE per i TODOS viene usato il router todosAPIRoutes nel formato '/todos/altreRotte' */
+/** Per identificare le rotte dei singoli servizi BE per i TODOS viene usato il router todosAPIRoutes nel formato '/todos/altreRotte'
+ *  Il middleware 'redirectToLogin' reindirizza alla login se non c'è un utente loggato. */
 const todosAPIRoutes = require('./routes/api/todosApiRoutes');
-app.use('/api/todos', todosAPIRoutes);
+app.use('/api/todos', redirectToLogin, todosAPIRoutes);
 
-/** Per identificare le rotte dei singoli servizi BE per le LISTE viene usato il router listsAPIRoutes nel formato '/lists/altreRotte' */
+/** Per identificare le rotte dei singoli servizi BE per le LISTE viene usato il router listsAPIRoutes nel formato '/lists/altreRotte'
+ *  Il middleware 'redirectToLogin' reindirizza alla login se non c'è un utente loggato. */
 const listsAPIRoutes = require('./routes/api/listsApiRoutes');
-app.use('/api/lists', listsAPIRoutes);
+app.use('/api/lists', redirectToLogin, listsAPIRoutes);
 
 /** Init delle tabelle a DB a partire dai models creati nell'applicativo */
 /** Inizializzazione delle tabelle DB */
@@ -59,7 +41,6 @@ const Todo = require('./models').Todo;
  * Per la prima volta conviene lanciare la sync dei singoli model. Quando tutte le tabelle sono state create si può
  * abbreviare questo procedimento chiamando il metodo sync() di sequelize.
  * @param isFirstCreation
- * @returns {Promise<void>}
  */
 async function initModelsDBTables(isFirstCreation) {
 
@@ -86,14 +67,7 @@ const {engine} = require('express-handlebars');
 /** Aggiunta del riferimento alla cartella public per i file statici */
 app.use(express.static(__dirname + '/public'));
 
-app.engine(
-    'hbs',
-    engine({
-        extname: 'hbs',
-        layoutsDir: './views/layouts'
-    }));
-app.use('sweetalert2', express.static(__dirname + '/node_modules/sweetalert2/dist'));
-
+/** Express Handlebars */
 app.engine(
     'hbs',
     engine({
@@ -103,12 +77,18 @@ app.engine(
 app.set('view engine', 'hbs'); /** Set dell'engine che si occuperà delle views */
 
 /** Routing */
-/** Per identificare le rotte FE per LISTS viene usato il router listsViewRoutes nel formato '/lists/altreRotte' */
-const listsViewRoutes = require('./routes/feViews/listsViewRoutes');
-app.use(['/', '/lists'], listsViewRoutes);
 
-/** Per identificare le rotte FE per AUTH viene usato il router authViewRoutes nel formato '/auth/altreRotte' */
+/** Mettere prima il middleware che ritorna alla home se si è loggati e dopo il middleware per
+ *  la redirect per la login. Altrimenti si innesca un ciclo infinito. */
+
+/** Per identificare le rotte FE per AUTH viene usato il router authViewRoutes nel formato '/auth/altreRotte'.
+ * Il middleware 'redirectToHome' reindirizza l'utente loggato alla homepage. */
 const authViewRoutes = require('./routes/auth/authFeRoutes');
-app.use(['/auth'], authViewRoutes);
+app.use('/auth', redirectToHome, authViewRoutes);
+
+/** Per identificare le rotte FE per LISTS viene usato il router listsViewRoutes nel formato '/lists/altreRotte'.
+ *  Il middleware 'redirectToLogin' reindirizza alla login se non c'è un utente loggato. */
+const listsViewRoutes = require('./routes/feViews/listsViewRoutes');
+app.use(['/', '/lists'], redirectToLogin, listsViewRoutes);
 
 /** FINE FE */

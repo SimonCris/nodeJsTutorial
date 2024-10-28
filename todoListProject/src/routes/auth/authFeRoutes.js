@@ -4,6 +4,13 @@ const authController = require("../../controllers/authController");
 /** Router che gestisce tutte le rotte */
 const authRouter = express.Router();
 
+/** Rotta equivalente a '/auth/login' */
+authRouter.get('/login', async (req, resp) => {
+    resp.render('viewTemplates/login', {
+        signup: false /** True nel caso di login come in questo caso */
+    });
+});
+
 /** Rotta equivalente a '/auth/signup' */
 authRouter.get('/signup', async (req, resp) => {
     resp.render('viewTemplates/login', {
