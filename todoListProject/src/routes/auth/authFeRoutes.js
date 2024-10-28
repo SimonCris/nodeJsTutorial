@@ -14,17 +14,21 @@ authRouter.get('/signup', async (req, resp) => {
 /** Rotta equivalente a '/auth/register' */
 authRouter.post('/register', async (req, resp) => {
     try{
-        const result = await authController.registerUser({
-                            name: req.body.name,
-                            email: req.body.email,
-                            password: req.body.password
-                       });
+        /** Dopo la registrazione, l'utente registrato viene memorizzato nella session e sarà quindi accessibile in ogni rotta */
+        req.session.user = await authController.registerUser({
+                                name: req.body.name,
+                                email: req.body.email,
+                                password: req.body.password
+                           });
+
+        /** Set del messaggio nella sessione lato server */
+        req.flash('successMessages', 'User registered successfully!');
 
         /** Dopo l'avvenuta aggiunta di un utente, avviene il redirect alla home page */
         resp.redirect('/');
     } catch (error) {
         const errorMessages = error.errors.map(errorMessage => errorMessage.message);
-       resp.status(500).send(errorMessages);
+        resp.status(500).send(errorMessages);
     }
 });
 
