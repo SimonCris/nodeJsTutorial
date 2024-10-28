@@ -108,7 +108,7 @@ const listsViewRoutes = require('./routes/feViews/listsViewRoutes');
 app.use(['/', '/lists'], listsViewRoutes);
 
 /** Per identificare le rotte FE per AUTH viene usato il router authViewRoutes nel formato '/auth/altreRotte' */
-const authViewRoutes = require('./routes/auth/auth');
+const authViewRoutes = require('./routes/auth/authFeRoutes');
 app.use(['/auth'], authViewRoutes);
 
 /** FINE FE */

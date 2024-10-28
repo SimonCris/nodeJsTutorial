@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -57,6 +59,13 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
+    hooks: { /** Gli hooks sono eventi che si scatenano in diversi momenti relativi alle action fatte sul model */
+      /** Hook scatenato prima della create */
+      beforeCreate: async (user) => {
+        // hash the password before creating a new user
+        user.password = await bcrypt.hash(user.password, 12);
+      }
+    },
     sequelize,
     modelName: 'User', /** Nome del model che sarà usato nell'applicativo */
     tableName: 'users', /** Nome della tabella che sarà creata a DB */

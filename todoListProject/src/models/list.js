@@ -45,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
+    hooks: {}, /** Gli hooks sono eventi che si scatenano in diversi momenti relativi alle action fatte sul model */
     sequelize,
     modelName: 'List',
     tableName: 'lists',

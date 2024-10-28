@@ -20,12 +20,28 @@
 
 <script>
 
+    import axios from "axios";
+
     /**
      * Metodo che inizia la registrazione di un nuovo utente
      * @param form
      */
-    function registerUser(form) {
-        alert(form.name.value);
+    async function registerUser(form) {
+        const name = form.name.value;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        try {
+            const result = await axios.post('/auth/register',
+                    {
+                        name,
+                        email,
+                        password
+                    }
+            );
+        } catch (e) {
+            alert('Error registering user:'+ e.response.data.message);
+        }
     }
 
 </script>
