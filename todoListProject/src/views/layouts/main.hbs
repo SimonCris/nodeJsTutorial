@@ -3,7 +3,10 @@
     {{>header}}
 </head>
 <body>
-    {{> navheader}}
+    {{> navheader this}} <!-- Passando THIS al partials passiamo l'accesso a tutte le variabili memorizzate nel passaggio da una rotta all'altra.
+                              In questo caso tramite THIS, dentro il partial navheader possiamo avere accesso alla variabile "user" memorizzata, ad esempio,
+                              nel file \src\routes\feViews\listsViewRoutes.js nella rotta equivalente a '/lists/' nel resp.render.
+                         -->
 <main class='container'>
     {{{body}}}
 </main>

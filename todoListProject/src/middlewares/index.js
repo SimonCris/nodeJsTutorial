@@ -39,13 +39,13 @@ const initMethodOverride = () => {
 
 /**
  * MIDDLEWARE Per il check sull'utente loggato.
- * Se l'utente è loggato viene eseguita una redirect alla Home (Lista delle liste)
+ * Se l'utente è loggato e non è il caso di click sul button "logout", viene eseguita una redirect alla Home (Lista delle liste)
  * @param req
  * @param resp
  * @param next
  */
 const redirectToHome = (req, resp, next) => {
-    if (req.session.user) {
+    if (req.session.user && !req.path === '/auth/logout') {
         resp.redirect('/');
     } else {
         next();

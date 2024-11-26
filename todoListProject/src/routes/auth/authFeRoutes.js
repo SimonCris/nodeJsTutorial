@@ -7,14 +7,37 @@ const authRouter = express.Router();
 /** Rotta equivalente a '/auth/login' */
 authRouter.get('/login', async (req, resp) => {
     resp.render('viewTemplates/login', {
-        signup: false /** True nel caso di login come in questo caso */
+        signup: false /** False nel caso di login come in questo caso */
     });
+});
+
+/** Rotta equivalente a '/auth/login' ed effettua la login al portale */
+authRouter.post('/login', async (req, resp) => {
+
+    try {
+
+        /** Dopo la registrazione, l'utente registrato viene memorizzato nella session e sarà quindi accessibile in ogni rotta */
+        req.session.user = await authController.login({
+            emailAddress: req.body.email,
+            password: req.body.password
+        });
+
+        /** Set del messaggio nella sessione lato server */
+        req.flash('successMessages', 'Login successfully!');
+
+        /** Dopo l'avvenuta login di un utente, avviene il redirect alla home page */
+        resp.redirect('/');
+
+    } catch (err) {
+        const errorMessages = err.message;
+        resp.status(500).send(errorMessages);
+    }
 });
 
 /** Rotta equivalente a '/auth/signup' */
 authRouter.get('/signup', async (req, resp) => {
     resp.render('viewTemplates/login', {
-        signup: true /** True nel caso di login come in questo caso */
+        signup: true /** True nel caso di registrazione utente come in questo caso */
     });
 });
 
@@ -37,6 +60,13 @@ authRouter.post('/register', async (req, resp) => {
         const errorMessages = error.errors.map(errorMessage => errorMessage.message);
         resp.status(500).send(errorMessages);
     }
+});
+
+/** Rotta equivalente a '/auth/logout' */
+authRouter.get('/logout', async (req, resp) => {
+    await req.session.destroy(() => {
+        resp.redirect('/auth/login');
+    });
 });
 
 module.exports = authRouter;

@@ -6,34 +6,48 @@
     {{/if}}
 </h2>
 
-<form action="/auth/register" method="post" onsubmit="registerUser(this); return false;">
-
     <!-- Il campo NAME viene mostrato solo per la registrazione e non per la login -->
     {{#if signup}}
+        <form action="/auth/register" method="post" onsubmit="registerUser(this); return false;">
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp">
         </div>
-    {{/if}}
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary"> Register </button>
+        </div>
+        <div class="form-group text-center"> Already Registered? <a href="/auth/login">LOGIN</a>
+        </div>
 
-    <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="password">
-    </div>
-    <div class="text-center">
-        <button type="submit" class="btn btn-primary">
-            {{#if signup}}
-                Register
-            {{else}}
-                Login
-            {{/if}}
-        </button>
-    </div>
-</form>
+        </form>
+
+    {{else}}
+
+        <form action="/auth/login" method="post" onsubmit="loginUser(this); return false;">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary"> Login </button>
+            </div>
+            <div class="form-group text-center"> Not Registered? <a href="/auth/signup">SIGNUP</a>
+            </div>
+        </form>
+
+    {{/if}}
 
 <script>
 
@@ -58,6 +72,28 @@
             );
         } catch (e) {
             alert('Error registering user:'+ e.response.data.message);
+        }
+    }
+
+    /**
+     * Metodo che effettua la login al portale
+     * @param form
+     */
+    async function loginUser(form) {
+        const name = form.name.value;
+        const emailAddress = form.email.value;
+        const password = form.password.value;
+
+        try {
+            const result = await axios.post('/auth/login',
+                    {
+                        name,
+                        emailAddress,
+                        password
+                    }
+            );
+        } catch (e) {
+            alert('Error login:'+ e.response.data.message);
         }
     }
 

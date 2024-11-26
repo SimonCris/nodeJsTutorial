@@ -20,6 +20,7 @@ listsViewRouter.get('/', async (req, resp) => {
          *  prende in input anche eventuali parametri (che vengono passati come json) come, in questo caso, l'array delle liste. */
         resp.render('viewTemplates/index', {
             lists: lists, /** Lista aggiornata delle liste */
+            user: req.session.user, /** Utente loggato */
             successMessages: req.flash('successMessages'), /** Recupero del messaggio dalla sessione (Messaggio impostato nella rotta relativa all'aggiunta di una nuova lista) */
             errorMessages: req.flash('errorMessages') /** Recupero dei messaggi di errori dalla sessione (Messaggio impostato nella rotta relativa all'aggiunta di una nuova lista) */
         });
@@ -38,7 +39,11 @@ listsViewRouter.get('/:list_id([0-9]+)/todos', async (req, resp) => {
         const list = await listController.getListById(req.params.list_id);
         /** Il metodo .render permette di graficare il template HTML che vogliamo, in questo caso todos.hbs e
          *  prende in input anche eventuali parametri (che vengono passati come json) come, in questo caso, l'array dei todos che hanno un determinato list_id. */
-        resp.render('viewTemplates/todos', {todosList: todosByList, list_name: list.name});
+        resp.render('viewTemplates/todos', {
+            todosList: todosByList,
+            list_name: list.name,
+            user: req.session.user /** Utente loggato */
+        });
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -54,7 +59,10 @@ listsViewRouter.get('/:list_id([0-9]+)/edit', async (req, resp) => {
         const list = await listController.getListById(req.params.list_id);
         /** Il metodo .render permette di graficare il template HTML che vogliamo, in questo caso edit.hbs e
          *  prende in input anche eventuali parametri (che vengono passati come json) come, in questo caso la lista. */
-        resp.render('viewTemplates/lists/edit', {list: list});
+        resp.render('viewTemplates/lists/edit', {
+            list: list,
+            user: req.session.user /** Utente loggato */
+        });
     } catch (err) {
         resp.status(500).send(err.message);
     }
@@ -103,6 +111,7 @@ listsViewRouter.patch('/:list_id([0-9]+)', async (req,resp) =>{
         const list = await listController.getListById(req.params.list_id);
         resp.render('viewTemplates/lists/edit', {
             list: list,
+            user: req.session.user, /** Utente loggato */
             errorMessages: req.flash('errorMessages')
         });
         // resp.status(500).send(error.toString());

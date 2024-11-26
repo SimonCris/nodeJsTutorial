@@ -1,3 +1,17 @@
+<style>
+
+    .usernameField {
+        color: darkslateblue;
+        width: max-content;
+        align-content: center;
+        background-color: white;
+        border-radius: 0.5rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+</style>
+
 <nav class='navbar navbar-expand-md navbar-dark fixed-top bg-dark'>
     <div class='container-fluid'>
         <a class='navbar-brand' href='#'>TODO LIST</a>
@@ -42,7 +56,23 @@
                         class='btn btn-outline-danger mx-2'
                         type='submit'
                 >Reset</button>
+                <ul class='navbar-nav me-auto mb-2 mb-md-0'>
+                    {{#if user}}
+                        <li class='nav-item usernameField'> {{user.name}} </li>
+                        <li class='nav-item'>
+                            <a class='nav-link' href='/auth/logout'>Logout</a>
+                        </li>
+                    {{else}}
+                        <li class='nav-item'>
+                            <a class='nav-link' href='/auth/login'>Login</a>
+                        </li>
+                        <li class='nav-item'>
+                            <a class='nav-link' href='/auth/signup'>Signup</a>
+                        </li>
+                    {{/if}}
+                </ul>
             </form>
+
         </div>
     </div>
 </nav>
