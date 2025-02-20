@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const {getWeather} = require("./functions");
 const {getData} = require("country-list");
+const {getAccessToken} = require("./entraIDIntegration");
 
 const app = express();
 app.listen(3000);
@@ -40,6 +42,19 @@ app.get('/getCountries', async(req, res) => {
         res.status(500).send(e.message)
     }
 });
+
+app.get('/getAccessToken', async(req, res) => {
+
+    try {
+        const accessToken = await getAccessToken();
+            console.log('Token di accesso:', accessToken);
+            res.json(accessToken);
+    } catch(error) {
+        console.error('Errore:', error);
+        res.status(500).send(error)
+    }
+
+})
 
 
 
