@@ -1,4 +1,11 @@
 body{
     padding-top:20px;
+}
 
+.iframe-container {
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 25px;
+    box-shadow: 2px 6px #888888;
+    margin: 30px;
 }

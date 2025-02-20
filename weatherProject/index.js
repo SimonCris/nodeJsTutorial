@@ -1,12 +1,17 @@
 require('dotenv').config();
 const express = require('express');
+const cookieParser = require('cookie-parser');
+
 const {getWeather} = require("./functions");
 const {getData} = require("country-list");
 const {getAccessToken} = require("./entraIDIntegration");
 
 const app = express();
-app.listen(3000);
 app.use(express.static('public'));
+app.listen(3000);
+
+// Usa il middleware cookie-parser
+app.use(cookieParser());
 
 /** MAPPING DELLE ROTTE DEL SERVER */
 app.get('/', (req, res) => {
@@ -47,6 +52,13 @@ app.get('/getAccessToken', async(req, res) => {
 
     try {
         const accessToken = await getAccessToken();
+
+        res.cookie('entraID', accessToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 3600000
+        });
+
         res.status(200).json({
             message: 'Token recuperato con successo',
             data: accessToken
