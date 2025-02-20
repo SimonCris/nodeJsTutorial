@@ -47,11 +47,16 @@ app.get('/getAccessToken', async(req, res) => {
 
     try {
         const accessToken = await getAccessToken();
-            console.log('Token di accesso:', accessToken);
-            res.json(accessToken);
+        res.status(200).json({
+            message: 'Token recuperato con successo',
+            data: accessToken
+        });
     } catch(error) {
         console.error('Errore:', error);
-        res.status(500).send(error)
+        res.status(500).json({
+            message: 'Errore durante il recupero del token',
+            error: error.message
+        });
     }
 
 })

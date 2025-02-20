@@ -60,6 +60,23 @@
             })
     }
 
+    function getAccessToken(){
+
+        const doc = document;
+        let serverUrl = SERVER_URL + 'getAccessToken';
+
+        /** Recupero degli elementi HTML da modificare */
+        let accessToken = doc.querySelector('#accessToken');
+        accessToken.innerHTML = '';
+
+        axios.get(serverUrl).then(resp => {
+            var responseObject = resp.data;
+            accessToken.innerHTML = responseObject.data;
+        }).catch(error=> {
+            console.log(error.response)
+        })
+    }
+
     document.addEventListener('DOMContentLoaded', ()=> {
         axios.get(SERVER_URL + 'getCountries')
             .then( result =>{
@@ -114,5 +131,25 @@
         <td  id="max-temp"></td>
     </tr>
 </table>
+
+<div>
+
+    <h3>EntraID Integration</h3>
+
+    <div class="form-group text-center">
+        <button class="btn btn-success" onclick="getAccessToken()">GET ACCESS TOKEN</button>
+    </div>
+
+    <table id="accessTokenTable" class="table-responsive table table-dark">
+        <tr>
+            <th>TOKEN</th>
+        </tr>
+        <tr>
+            <td id="accessToken"></td>
+        </tr>
+    </table>
+
+</div>
+
 </body>
 </html>
